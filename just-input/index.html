@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BBB Tools</title>
+    <title>BBB-Tools</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
@@ -19,9 +18,9 @@
     </div>
     <div class="lists">
         <ul>
-            <li>1. Compute: <span><input type="text" value="0" id="compute" disabled style="padding-right: 5px; padding-left: 5px;"></span> (8 CPU Core, 16 GB RAM, 3 GHz processor)</li>
-            <li>2. Storage: <span><input type="text" value="0" id="storage" disabled style="padding-right: 5px; padding-left: 5px;"></span> GB per Day</li>
-            <li>3. Bandwidth: <span><input type="text" value="0" id="bandwidth" disabled style="padding-right: 5px; padding-left: 5px;"></span> GB per hour</li>
+            <li>1. Compute (8 CPU Core, 16 GB RAM, 3 GHz processor): <span id="compute" disabled></span></li>
+            <li>2. Storage: <span id="storage" ></span> </li>
+            <li>3. Bandwidth: <span id="bandwidth" ></span> </li>
             <li id="scalelite" style="display: none;"><span>4. Scalelite server needed</span></li>
             </ul>
     </div>
@@ -105,32 +104,29 @@
     resizable(document.getElementById('user'),20);
     resizable(document.getElementById('cls'),20);
     resizable(document.getElementById('classperday'),20);
-    resizable(document.getElementById('compute'));
-    resizable(document.getElementById('storage'));
-    resizable(document.getElementById('bandwidth'));
 </script>
 
-<!-- ====== Main script Here all the calclulation will happens ====== -->
+<!-- ====== Main script Here all the calculation will happens ====== -->
 <script>
 
     function calculate_price() {
         // Get the input from user
-        var user = document.getElementById("user").value
+        var user = document.getElementById("user").value.trim()
 
-        var cls = document.getElementById("cls").value
+        var cls = document.getElementById("cls").value.trim()
       
-        var classperday = document.getElementById("classperday").value
+        var classperday = document.getElementById("classperday").value.trim()
  
-        var video = classperday * ( user- 1)* cls * 0.25 * 3600 
+        var video = classperday * cls * ( user- 1) * 0.25 * 3600 
 
         var audio = user * 0.04 * 3600
 
-        var screen_sharing = user * 0.04 * 900 *cls
+        var screen_sharing = user * 0.04 * 900 * cls
         
         var bandwidth =  video + audio + screen_sharing
        
         // Total bandwidth calclulation in GB
-        bandwidth = bandwidth/1024
+        bandwidth_in_gb = (bandwidth/1024) *20
    
         // calculate bbb server required for current input of user
        function calclulate_bbb_server(user){
@@ -144,7 +140,7 @@
                return  Math.floor(user/150) + 1
             }
             // if users are less than 150 then return 1
-            else{
+            else {
                 return 1
             }
        }
@@ -161,7 +157,7 @@
         
         // Get the storage required for recording per day
         function get_recording_storage(concurrent_class,total_class){
-            return (concurrent_class * total_class * 524)/1024
+            return (concurrent_class * total_class * 524)/1024 *20
         }
 
         // checks is scalelite load balencer is required?
@@ -174,10 +170,14 @@
             }
         }
 
-        document.getElementById('compute').value = deal_with_negative(calclulate_bbb_server(user))
-        document.getElementById('storage').value = deal_with_negative(get_recording_storage(cls,classperday))
-        document.getElementById('bandwidth').value = deal_with_negative(bandwidth)
-        document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(user))
+        // only give output id all three inputs are given
+        if(user && cls && classperday){
+            $('#compute').text(deal_with_negative(calclulate_bbb_server(user)))
+            $('#storage').text(deal_with_negative(get_recording_storage(cls,classperday))+' GB per month')
+            $('#bandwidth').text(deal_with_negative(bandwidth_in_gb) + ' GB per month')
+            document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(user))
+    }
+
     }
 </script>
 </body>
