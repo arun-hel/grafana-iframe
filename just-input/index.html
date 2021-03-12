@@ -29,7 +29,7 @@
         <div class="hel">
             <h4>HEL</h4>
             <ul>
-            <li>Compute: <span id="hel-compute"></span> Compute</li>
+            <li>Compute: <span id="hel-compute"></span> Compute, Price: <span id="hel-compute-price"></span> $ per month</li>
             <li>Storage: <span id="hel-storage"></span></li>
             <li>Bandwidth: <span id="hel-bandwidth"></span> </li>
         </ul>
@@ -37,7 +37,7 @@
         <div class="aws">
             <h4>AWS</h4>
             <ul>
-            <li>Compute: <span id="aws-compute"></span> c6g.2xlarge </li>
+            <li>Compute: <span id="aws-compute"></span> c6g.2xlarge, Price: <span id="aws-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="aws-storage"></span></li>
             <li>Bandwidth: <span id="aws-bandwidth"></span> </li>
         </ul>
@@ -45,7 +45,7 @@
         <div class="do">
             <h4>DO</h4>
         <ul>
-            <li>Compute: <span id="do-compute"></span> Droplet</li>
+            <li>Compute: <span id="do-compute"></span> Droplet, Price: <span id="do-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="do-storage"></span></li>
             <li>Bandwidth: <span id="do-bandwidth"></span> </li>
         </ul>
@@ -260,22 +260,40 @@
 
          }
 
+         function compute_price(service_provider, bbb_server){
+             switch(service_provider){
+                 case 'aws' :
+                     return (bbb_server * 129) 
+                    break;
+                case 'DO' :
+                    return (bbb_server * 80)
+                    break;
+                
+                case 'hel' :
+                    return (bbb_server * 72)
+             }
+
+         }
+
         // only give output id all three inputs are given
         if(students_count && classes_count && sessions_count){
             $('#compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
             $('#hel-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+            $('#hel-compute-price').text(compute_price('hel', bbb_server))
             $('#aws-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+            $('#aws-compute-price').text(compute_price('aws', bbb_server))
             $('#do-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+            $('#do-compute-price').text(compute_price('DO', bbb_server))
 
             $('#storage').text(deal_with_negative(get_recording_storage(classes_count,sessions_count))+' GB per month')
             $('#hel-storage').text(storage_price_calc('hel',recording_storage))
-            $('#aws-storage').text(storage_price_calc('aws',recording_storage)+' $ per month')
-            $('#do-storage').text(storage_price_calc('DO',recording_storage)+' $ per month')
+            $('#aws-storage').text(Math.ceil(storage_price_calc('aws',recording_storage))+' $ per month')
+            $('#do-storage').text(Math.ceil(storage_price_calc('DO',recording_storage))+' $ per month')
 
             $('#bandwidth').text(deal_with_negative(bandwidth_in_gb) + ' GB per month')
             $('#hel-bandwidth').text(out_bound_data_price_calc(bandwidth,'hel',students_count) )
-            $('#aws-bandwidth').text(out_bound_data_price_calc(bandwidth,'aws',students_count) + ' $ per month')
-            $('#do-bandwidth').text(out_bound_data_price_calc(bandwidth,'DO',students_count) + ' $ per month')
+            $('#aws-bandwidth').text(Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count)) + ' $ per month')
+            $('#do-bandwidth').text(Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count)) + ' $ per month')
             document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(students_count))
     }
 
