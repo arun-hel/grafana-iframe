@@ -9,11 +9,11 @@
 <body>
     <div id="">
         <h2>To teach 
-            <span><input type="number" oninput="calculate_price()" min="1" id="user" value="" placeholder="150" required> </span>
+            <span><input type="number" oninput="calculate_price()" min="1" id="students_count" value="" placeholder="150" required> </span>
             concurrent students in 
-            <span><input type="number" oninput="calculate_price()" min="1" id="cls" value="" placeholder="5" required> </span>
+            <span><input type="number" oninput="calculate_price()" min="1" id="classes_count" value="" placeholder="5" required> </span>
             classes, and 
-            <span><input type="number" oninput="calculate_price()" min="1" id="classperday" value="" placeholder="5" required> </span>
+            <span><input type="number" oninput="calculate_price()" min="1" id="sessions_count" value="" placeholder="5" required> </span>
             classes a day, here are you estimates:</h2>
     </div>
     <div class="lists">
@@ -25,9 +25,38 @@
             </ul>
     </div>
 
+    <div class="price-compare">
+        <div class="hel">
+            <h4>HEL</h4>
+            <ul>
+            <li>Compute: <span id="hel-compute"></span> Compute</li>
+            <li>Storage: <span id="hel-storage"></span></li>
+            <li>Bandwidth: <span id="hel-bandwidth"></span> </li>
+        </ul>
+        </div>
+        <div class="aws">
+            <h4>AWS</h4>
+            <ul>
+            <li>Compute: <span id="aws-compute"></span> c6g.2xlarge </li>
+            <li>Storage: <span id="aws-storage"></span></li>
+            <li>Bandwidth: <span id="aws-bandwidth"></span> </li>
+        </ul>
+        </div>
+        <div class="do">
+            <h4>DO</h4>
+        <ul>
+            <li>Compute: <span id="do-compute"></span> Droplet</li>
+            <li>Storage: <span id="do-storage"></span></li>
+            <li>Bandwidth: <span id="do-bandwidth"></span> </li>
+        </ul>
+        </div>
+        </div>
+
+    </div>
+
 <style>
     /* set underline for input field to differentiate */
-    #user, #cls, #classperday{
+    #students_count, #classes_count, #sessions_count{
     border-bottom: solid 1px blue !important; 
     color: rgb(33, 106, 155);
     }
@@ -43,7 +72,7 @@
     }
 
     /* remove list style so that we can dynamically add scalelite required line */
-    .lists>ul>li{
+    li{
         list-style: none !important;
     }
 
@@ -56,7 +85,7 @@
     margin: 0; 
 }
     /* remove default styling for input field  */
-    #user, #cls, #classperday {
+    #students_count, #classes_count, #sessions_count {
     border: none;
     border-bottom: solid 1px blueviolet;
     overflow: auto;
@@ -73,7 +102,7 @@
     text-align:center;
 }
     /* prevent font size change when focused change the fontsize according to your need */
-    #user, #cls, #classperday:focus{
+    #students_count, #classes_count, #sessions_count:focus{
         font-size: 20px;
         font-weight: bold;
 }
@@ -101,45 +130,39 @@
         for (var i in e) el.addEventListener(e[i],resize,false);
         resize();
     }
-    resizable(document.getElementById('user'),20);
-    resizable(document.getElementById('cls'),20);
-    resizable(document.getElementById('classperday'),20);
+    resizable(document.getElementById('students_count'),20);
+    resizable(document.getElementById('classes_count'),20);
+    resizable(document.getElementById('sessions_count'),20);
 </script>
 
 <!-- ====== Main script Here all the calculation will happens ====== -->
 <script>
 
     function calculate_price() {
-        // Get the input from user
-        var user = document.getElementById("user").value.trim()
+        // Get the input from students_count
+        var students_count = document.getElementById("students_count").value.trim()
 
-        var cls = document.getElementById("cls").value.trim()
+        var classes_count = document.getElementById("classes_count").value.trim()
       
-        var classperday = document.getElementById("classperday").value.trim()
+        var sessions_count = document.getElementById("sessions_count").value.trim()
  
-        var video = classperday * cls * ( user- 1) * 0.25 * 3600 
-
-        var audio = user * 0.04 * 3600
-
-        var screen_sharing = user * 0.04 * 900 * cls
-        
-        var bandwidth =  video + audio + screen_sharing
-       
-        // Total bandwidth calclulation in GB
-        bandwidth_in_gb = (bandwidth/1024) *20
+        var video=classes_count*(students_count-1)*0.25*3600
+        var audio=students_count*0.04*3600
+        var screen_sharing=students_count*0.6*900
+        var bandwidth_per_session=Math.ceil((video+audio+screen_sharing)/8);var bandwidth_per_day=bandwidth_per_session*sessions_count;bandwidth_in_gb=Math.ceil((bandwidth_per_day/1024)*20)
    
-        // calculate bbb server required for current input of user
-       function calclulate_bbb_server(user){
-        // if user number is multipe of 150 then simply return corresponding bbb server required   
-        if (user > 150 && user%150 == 0 ){
-            return  (user/150)
+        // calculate bbb server required for current input of students_count
+       function calclulate_bbb_server(students_count){
+        // if students_count number is multipe of 150 then simply return corresponding bbb server required   
+        if (students_count > 150 && students_count%150 == 0 ){
+            return  (students_count/150)
             }
-            // if user number is not a multiple of 150 (ex:320) then add +1 to fraction i.e 320/150=2.13 
-            // take only 2 and add +1 i.e bbb server required for 320 user = 2 + 1 = 3 
-            else if(user > 150 && user%150 != 0 ) {
-               return  Math.floor(user/150) + 1
+            // if students_count number is not a multiple of 150 (ex:320) then add +1 to fraction i.e 320/150=2.13 
+            // take only 2 and add +1 i.e bbb server required for 320 students_count = 2 + 1 = 3 
+            else if(students_count > 150 && students_count%150 != 0 ) {
+               return  Math.floor(students_count/150) + 1
             }
-            // if users are less than 150 then return 1
+            // if students_counts are less than 150 then return 1
             else {
                 return 1
             }
@@ -157,7 +180,7 @@
         
         // Get the storage required for recording per day
         function get_recording_storage(concurrent_class,total_class){
-            return (concurrent_class * total_class * 524)/1024 *20
+            return (concurrent_class * total_class * 149)/1024 *20
         }
 
         // checks is scalelite load balencer is required?
@@ -170,12 +193,90 @@
             }
         }
 
+        var bbb_server = calclulate_bbb_server(students_count)
+        var recording_storage  = get_recording_storage(classes_count,sessions_count)
+        var bandwidth  = bandwidth_in_gb
+        
+        // storage  price  calculations
+        function storage_price_calc(service_provider,recording_storage){
+            switch(service_provider){
+                case 'aws':
+                    return 0.025 * recording_storage
+                    break;
+                case 'DO':
+                    var default_storage = 250
+                    if (recording_storage > default_storage){
+                        var charged_storage = recording_storage/default_storage
+                        return 5 * Math.ceil(charged_storage)
+                    }
+                    else{
+                        return 5
+                    }
+                    break;
+
+                case 'hel':
+                    return 'No charges'
+                break;
+            } 
+        }
+
+        // Outbound data price calculate
+         function out_bound_data_price_calc(data,service_provider,students_count){
+             switch(service_provider){
+                case 'aws':
+                     if (data < 10000){
+                        return ((data +(recording_storage * students_count))  * 0.15)
+                     }
+                     else if (10000<data<40000){
+                        return ((data +(recording_storage * students_count))  * 0.11)
+                     }
+                     else if (40000<data<100000){
+                        return ((data +(recording_storage * students_count))   * 0.09) 
+                     }
+                     else {
+                        return (data +(recording_storage * students_count))  * 0.08 
+                     }
+                break;
+                
+                case 'DO':
+                    var traffic_limit = bbb_server * 6000
+                    var storage_outbound_limit = Math.ceil(recording_storage/250) * 1000
+                    var tob = 0
+                    var sob = 0
+                    if (data>traffic_limit){
+                        var tob =  (data - traffic_limit) * 0.01
+                    }
+                    else if ((recording_storage * students_count) > storage_outbound_limit){
+                        var sob = ((recording_storage * students_count) - (storage_outbound_limit)) * 0.01
+                    }
+                    console.log(sob+tob)
+                    return sob + tob
+                break;
+
+                case 'hel':
+                    return 'No charges'
+                break;
+             }
+
+         }
+
         // only give output id all three inputs are given
-        if(user && cls && classperday){
-            $('#compute').text(deal_with_negative(calclulate_bbb_server(user)))
-            $('#storage').text(deal_with_negative(get_recording_storage(cls,classperday))+' GB per month')
+        if(students_count && classes_count && sessions_count){
+            $('#compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+            $('#hel-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+            $('#aws-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+            $('#do-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+
+            $('#storage').text(deal_with_negative(get_recording_storage(classes_count,sessions_count))+' GB per month')
+            $('#hel-storage').text(storage_price_calc('hel',recording_storage))
+            $('#aws-storage').text(storage_price_calc('aws',recording_storage)+' $ per month')
+            $('#do-storage').text(storage_price_calc('DO',recording_storage)+' $ per month')
+
             $('#bandwidth').text(deal_with_negative(bandwidth_in_gb) + ' GB per month')
-            document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(user))
+            $('#hel-bandwidth').text(out_bound_data_price_calc(bandwidth,'hel',students_count) )
+            $('#aws-bandwidth').text(out_bound_data_price_calc(bandwidth,'aws',students_count) + ' $ per month')
+            $('#do-bandwidth').text(out_bound_data_price_calc(bandwidth,'DO',students_count) + ' $ per month')
+            document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(students_count))
     }
 
     }
