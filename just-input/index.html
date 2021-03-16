@@ -34,9 +34,9 @@
             <li>Storage: <span id="hel-storage"></span></li>
             <li>Bandwidth: <span id="hel-bandwidth"></span> </li>
         </ul>
-        </div>
+        </div> 
         <div class="aws">
-            <h4>AWS</h4>
+            <h4>AWS <span><a  href="https://calculator.aws/#/createCalculator/EC2?nc2=type_a"  target="_blank">Reference</a></span></h4> 
             <ul>
             <li>Compute: <span id="aws-compute"></span> c5a.2xlarge, Price: <span id="aws-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="aws-storage"></span></li>
@@ -44,7 +44,7 @@
         </ul>
         </div>
         <div class="do">
-            <h4>DO</h4>
+            <h4>DO <span><a  href="https://www.digitalocean.com/pricing"  target="_blank">Reference</a></span> </h4> 
         <ul>
             <li>Compute: <span id="do-compute"></span> Basic Droplet(shared), Price: <span id="do-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="do-storage"></span></li>
@@ -68,6 +68,12 @@
     -moz-box-shadow: none;
     box-shadow: none;
     text-align:center;
+    }
+    /* remove styling for link */
+    a{
+        font-size: small;
+        font-weight: 300;
+        text-decoration: none;
     }
 
     /* remove list style so that we can dynamically add scalelite required line */
