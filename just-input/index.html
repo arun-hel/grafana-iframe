@@ -294,14 +294,14 @@
 
             // aws
             document.getElementById("aws-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
-            document.getElementById("aws-compute-price").innerHTML = compute_price('hel', bbb_server)
+            document.getElementById("aws-compute-price").innerHTML = compute_price('aws', bbb_server)
             document.getElementById("aws-storage").innerHTML =Math.ceil(storage_price_calc('aws',recording_storage))+' $ per month'
             document.getElementById("aws-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count)) + ' $ per month'
             document.getElementById("total-aws").innerHTML = aws + " $ per month" 
 
             // DO
             document.getElementById("do-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
-            document.getElementById("do-compute-price").innerHTML = compute_price('hel', bbb_server)
+            document.getElementById("do-compute-price").innerHTML = compute_price('DO', bbb_server)
             document.getElementById("do-storage").innerHTML =Math.ceil(storage_price_calc('DO',recording_storage))+' $ per month'   
             document.getElementById("do-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count)) + ' $ per month'
             document.getElementById("total-DO").innerHTML = DO + " $ per month" 
