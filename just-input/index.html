@@ -25,6 +25,7 @@
             </ul>
     </div>
 
+    <!-- Price comparision  -->
     <div class="price-compare">
         <div class="hel">
             <h4>HEL</h4>
@@ -51,9 +52,7 @@
         </ul>
         </div>
         </div>
-
-    </div>
-
+        <!-- price comparion end -->
 <style>
     /* set underline for input field to differentiate */
     #students_count, #classes_count, #sessions_count{
@@ -193,6 +192,7 @@
             }
         }
 
+        // Bandwidth price and storage price calculation 
         var bbb_server = calclulate_bbb_server(students_count)
         var recording_storage  = get_recording_storage(classes_count,sessions_count)
         var bandwidth  = bandwidth_in_gb
@@ -204,13 +204,13 @@
                     return 0.10 * recording_storage
                     break;
                 case 'DO':
-                    var default_storage = 250
+                    var default_storage = 320
                     if (recording_storage > default_storage){
-                        var charged_storage = recording_storage/default_storage
-                        return 5 * Math.ceil(charged_storage)
+                        var charged_storage = recording_storage - default_storage
+                        return 0.10 * Math.ceil(charged_storage)
                     }
                     else{
-                        return 5
+                        return 0
                     }
                     break;
 
@@ -221,7 +221,7 @@
         }
 
         // Outbound data price calculate
-         function out_bound_data_price_calc(data,service_provider,students_count){
+         function out_bound_data_price_calc(data,service_provider){
              switch(service_provider){
                 case 'aws':
                      if (data < 10000){
@@ -253,7 +253,7 @@
              }
 
          }
-
+        // Computing node price
          function compute_price(service_provider, bbb_server){
              switch(service_provider){
                  case 'aws' :
@@ -272,22 +272,31 @@
         // only give output id all three inputs are given
         if(students_count && classes_count && sessions_count){
             $('#compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+
+            // compute and prices.
             $('#hel-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
             $('#hel-compute-price').text(compute_price('hel', bbb_server))
+
             $('#aws-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
             $('#aws-compute-price').text(compute_price('aws', bbb_server))
+            
             $('#do-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
             $('#do-compute-price').text(compute_price('DO', bbb_server))
 
             $('#storage').text(deal_with_negative(get_recording_storage(classes_count,sessions_count))+' GB per month')
+
+             // storage price 
             $('#hel-storage').text(storage_price_calc('hel',recording_storage))
             $('#aws-storage').text(Math.ceil(storage_price_calc('aws',recording_storage))+' $ per month')
             $('#do-storage').text(Math.ceil(storage_price_calc('DO',recording_storage))+' $ per month')
 
             $('#bandwidth').text(deal_with_negative(bandwidth_in_gb) + ' GB per month')
+
+            // bandwidth price 
             $('#hel-bandwidth').text(out_bound_data_price_calc(bandwidth,'hel',students_count) )
             $('#aws-bandwidth').text(Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count)) + ' $ per month')
             $('#do-bandwidth').text(Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count)) + ' $ per month')
+
             document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(students_count))
     }
 
