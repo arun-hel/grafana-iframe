@@ -148,7 +148,9 @@
         var video=classes_count*(students_count-1)*0.25*3600
         var audio=students_count*0.04*3600
         var screen_sharing=students_count*0.6*900
-        var bandwidth_per_session=Math.ceil((video+audio+screen_sharing)/8);var bandwidth_per_day=bandwidth_per_session*sessions_count;bandwidth_in_gb=Math.ceil((bandwidth_per_day/1024)*20)
+        var bandwidth_per_session=Math.ceil((video+audio+screen_sharing)/8);
+        var bandwidth_per_day=bandwidth_per_session*sessions_count;
+        var bandwidth_in_gb=Math.ceil((bandwidth_per_day/1024)*20)
    
         // calculate bbb server required for current input of students_count
        function calclulate_bbb_server(students_count){
