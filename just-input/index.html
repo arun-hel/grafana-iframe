@@ -201,7 +201,7 @@
         function storage_price_calc(service_provider,recording_storage){
             switch(service_provider){
                 case 'aws':
-                    return 0.025 * recording_storage
+                    return 0.10 * recording_storage
                     break;
                 case 'DO':
                     var default_storage = 250
@@ -225,32 +225,26 @@
              switch(service_provider){
                 case 'aws':
                      if (data < 10000){
-                        return ((data +(recording_storage * students_count))  * 0.15)
+                        return (data  * 0.15)
                      }
                      else if (10000<data<40000){
-                        return ((data +(recording_storage * students_count))  * 0.11)
+                        return (data  * 0.11)
                      }
                      else if (40000<data<100000){
-                        return ((data +(recording_storage * students_count))   * 0.09) 
+                        return (data  * 0.09) 
                      }
                      else {
-                        return (data +(recording_storage * students_count))  * 0.08 
+                        return (data  * 0.08)
                      }
                 break;
                 
                 case 'DO':
                     var traffic_limit = bbb_server * 6000
-                    var storage_outbound_limit = Math.ceil(recording_storage/250) * 1000
                     var tob = 0
-                    var sob = 0
                     if (data>traffic_limit){
                         var tob =  (data - traffic_limit) * 0.01
                     }
-                    else if ((recording_storage * students_count) > storage_outbound_limit){
-                        var sob = ((recording_storage * students_count) - (storage_outbound_limit)) * 0.01
-                    }
-                    console.log(sob+tob)
-                    return sob + tob
+                    return tob
                 break;
 
                 case 'hel':
