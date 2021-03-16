@@ -38,7 +38,7 @@
         <div class="aws">
             <h4>AWS</h4>
             <ul>
-            <li>Compute: <span id="aws-compute"></span> c6g.2xlarge, Price: <span id="aws-compute-price"></span> $ per month</li></li>
+            <li>Compute: <span id="aws-compute"></span> c5a.2xlarge, Price: <span id="aws-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="aws-storage"></span></li>
             <li>Bandwidth: <span id="aws-bandwidth"></span> </li>
         </ul>
@@ -46,7 +46,7 @@
         <div class="do">
             <h4>DO</h4>
         <ul>
-            <li>Compute: <span id="do-compute"></span> Droplet, Price: <span id="do-compute-price"></span> $ per month</li></li>
+            <li>Compute: <span id="do-compute"></span> Basic Droplet(shared), Price: <span id="do-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="do-storage"></span></li>
             <li>Bandwidth: <span id="do-bandwidth"></span> </li>
         </ul>
@@ -203,7 +203,7 @@
         function storage_price_calc(service_provider,recording_storage){
             switch(service_provider){
                 case 'aws':
-                    return 0.10 * recording_storage
+                    return 0.0174 * recording_storage
                     break;
                 case 'DO':
                     var default_storage = 320
@@ -227,16 +227,10 @@
              switch(service_provider){
                 case 'aws':
                      if (data < 10000){
-                        return (data  * 0.15)
-                     }
-                     else if (10000<data<40000){
-                        return (data  * 0.11)
-                     }
-                     else if (40000<data<100000){
-                        return (data  * 0.09) 
+                        return (data  * 0.1093)
                      }
                      else {
-                        return (data  * 0.08)
+                        return (data  * 0.085 )
                      }
                 break;
                 
@@ -259,7 +253,7 @@
          function compute_price(service_provider, bbb_server){
              switch(service_provider){
                  case 'aws' :
-                     return (bbb_server * 129) 
+                     return (bbb_server * 135) 
                     break;
                 case 'DO' :
                     return (bbb_server * 80)
