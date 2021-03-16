@@ -33,6 +33,7 @@
             <li>Compute: <span id="hel-compute"></span> Compute, Price: <span id="hel-compute-price"></span> $ per month</li>
             <li>Storage: <span id="hel-storage"></span></li>
             <li>Bandwidth: <span id="hel-bandwidth"></span> </li>
+            <li>Total : <span id="total-hel"></span></li>
         </ul>
         </div> 
         <div class="aws">
@@ -41,6 +42,7 @@
             <li>Compute: <span id="aws-compute"></span> c5a.2xlarge, Price: <span id="aws-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="aws-storage"></span></li>
             <li>Bandwidth: <span id="aws-bandwidth"></span> </li>
+            <li>Total : <span id="total-aws"></span></li>
         </ul>
         </div>
         <div class="do">
@@ -49,6 +51,7 @@
             <li>Compute: <span id="do-compute"></span> Basic Droplet(shared), Price: <span id="do-compute-price"></span> $ per month</li></li>
             <li>Storage: <span id="do-storage"></span></li>
             <li>Bandwidth: <span id="do-bandwidth"></span> </li>
+            <li>Total : <span id="total-DO"></span></li>
         </ul>
         </div>
         </div>
@@ -223,7 +226,7 @@
                     break;
 
                 case 'hel':
-                    return 'No charges'
+                    return 0
                 break;
             } 
         }
@@ -250,7 +253,7 @@
                 break;
 
                 case 'hel':
-                    return 'No charges'
+                    return 0
                 break;
              }
 
@@ -270,35 +273,41 @@
              }
 
          }
+        //  total price 
+        var hel = compute_price('hel', bbb_server) 
+        var aws = compute_price('aws', bbb_server) + Math.ceil(storage_price_calc('aws',recording_storage)) + Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count))
+        var DO = compute_price('DO', bbb_server) + Math.ceil(storage_price_calc('DO',recording_storage)) + Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count))
 
         // only give output id all three inputs are given
         if(students_count && classes_count && sessions_count){
-            $('#compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
+        
+            // basic
+            document.getElementById("compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
+            document.getElementById("storage").innerHTML = get_recording_storage(classes_count,sessions_count)+' GB per month'
+            document.getElementById("bandwidth").innerHTML = deal_with_negative(bandwidth_in_gb) + ' GB per month'
 
-            // compute and prices.
-            $('#hel-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
-            $('#hel-compute-price').text(compute_price('hel', bbb_server))
+            // hel
+            document.getElementById("hel-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
+            document.getElementById("hel-compute-price").innerHTML = compute_price('hel', bbb_server)
+            document.getElementById("hel-storage").innerHTML =Math.ceil(storage_price_calc('hel',recording_storage))
+            document.getElementById("hel-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'hel',students_count))
+            document.getElementById("total-hel").innerHTML = hel + " $ per month" 
 
-            $('#aws-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
-            $('#aws-compute-price').text(compute_price('aws', bbb_server))
+            // aws
+            document.getElementById("aws-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
+            document.getElementById("aws-compute-price").innerHTML = compute_price('hel', bbb_server)
+            document.getElementById("aws-storage").innerHTML =Math.ceil(storage_price_calc('aws',recording_storage))+' $ per month'
+            document.getElementById("aws-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count)) + ' $ per month'
+            document.getElementById("total-aws").innerHTML = aws + " $ per month" 
+
+            // DO
+            document.getElementById("do-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
+            document.getElementById("do-compute-price").innerHTML = compute_price('hel', bbb_server)
+            document.getElementById("do-storage").innerHTML =Math.ceil(storage_price_calc('DO',recording_storage))+' $ per month'   
+            document.getElementById("do-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count)) + ' $ per month'
+            document.getElementById("total-DO").innerHTML = DO + " $ per month" 
             
-            $('#do-compute').text(deal_with_negative(calclulate_bbb_server(students_count)))
-            $('#do-compute-price').text(compute_price('DO', bbb_server))
-
-            $('#storage').text(deal_with_negative(get_recording_storage(classes_count,sessions_count))+' GB per month')
-
-             // storage price 
-            $('#hel-storage').text(storage_price_calc('hel',recording_storage))
-            $('#aws-storage').text(Math.ceil(storage_price_calc('aws',recording_storage))+' $ per month')
-            $('#do-storage').text(Math.ceil(storage_price_calc('DO',recording_storage))+' $ per month')
-
-            $('#bandwidth').text(deal_with_negative(bandwidth_in_gb) + ' GB per month')
-
-            // bandwidth price 
-            $('#hel-bandwidth').text(out_bound_data_price_calc(bandwidth,'hel',students_count) )
-            $('#aws-bandwidth').text(Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count)) + ' $ per month')
-            $('#do-bandwidth').text(Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count)) + ' $ per month')
-
+            // Scalelite needed?
             document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(students_count))
     }
 
