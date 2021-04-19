@@ -1,316 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BBB-Tools</title>
+  <title>MVS-EDU</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div id="">
-        <h2>To teach 
-            <span><input type="number" oninput="calculate_price()" min="1" id="students_count" value="" placeholder="150" required> </span>
-            concurrent students in 
-            <span><input type="number" oninput="calculate_price()" min="1" id="classes_count" value="" placeholder="5" required> </span>
-            classes, and 
-            <span><input type="number" oninput="calculate_price()" min="1" id="sessions_count" value="" placeholder="5" required> </span>
-            classes a day, here are you estimates:</h2>
+    <div class="container-fluid">
+        <style>
+            iframe{
+                margin-top: 0.5em;             
+            }
+        </style>
+        <div class="row-no-gutters" style="margin-top: 1em;" >
+            <!-- BBB API -->
+            <div class="col-lg-4 col-md-4"><iframe style="width: 99%;" src="https://bbb2.mvs-edu.com/monitoring/d-solo/HIbd_CXZz/mvs-edu-all-servers?orgId=1&refresh=5s&from=1618834140709&to=1618834440709&var-datasource=Prometheus&var-job=bbb&var-job_node_exporter=bbb_node_exporter&var-job_netdata=&var-interface=br-3b22f05a3dbe&panelId=12"   frameborder="0"></iframe></div>
+            <!-- Participants per server -->
+            <div class="col-lg-4 col-md-4"><iframe style="width: 99%;" src="https://bbb2.mvs-edu.com/monitoring/d-solo/HIbd_CXZz/mvs-edu-all-servers?orgId=1&refresh=5s&from=1618834157165&to=1618834457165&var-datasource=Prometheus&var-job=bbb&var-job_node_exporter=bbb_node_exporter&var-job_netdata=&var-interface=br-3b22f05a3dbe&panelId=24"   frameborder="0"></iframe></div>
+            <!-- Total Rooms -->
+            <div class="col-lg-2 col-md-2"><iframe style="width: 99%;" src="https://bbb2.mvs-edu.com/monitoring/d-solo/HIbd_CXZz/mvs-edu-all-servers?orgId=1&refresh=5s&from=1618834191930&to=1618834491930&var-datasource=Prometheus&var-job=bbb&var-job_node_exporter=bbb_node_exporter&var-job_netdata=&var-interface=br-3b22f05a3dbe&panelId=53"   frameborder="0"></iframe></div>
+            <!-- Total Participants -->
+            <div class="col-lg-2 col-md-2"><iframe style="width: 99%;" src="https://bbb2.mvs-edu.com/monitoring/d-solo/HIbd_CXZz/mvs-edu-all-servers?orgId=1&refresh=5s&from=1618834210875&to=1618834510875&var-datasource=Prometheus&var-job=bbb&var-job_node_exporter=bbb_node_exporter&var-job_netdata=&var-interface=br-3b22f05a3dbe&panelId=34"   frameborder="0"></iframe></div>
+        </div>
+
+        <div class="row-no-gutters" >
+            <!-- Participants -->
+            <iframe style="width: 100%; height: 55vh;"  src="https://bbb2.mvs-edu.com/monitoring/d-solo/HIbd_CXZz/mvs-edu-all-servers?orgId=1&refresh=5s&from=1618834971680&to=1618835271680&var-datasource=Prometheus&var-job=bbb&var-job_node_exporter=bbb_node_exporter&var-job_netdata=&var-interface=br-3b22f05a3dbe&panelId=2"   frameborder="0"></iframe>
+        </div>
+
+        <div class="row-no-gutters">
+            <div class="col-lg-6 col-md-6">
+                <!-- Number of Rooms -->
+                <iframe style="width: 99%; height: 50vh" src="https://bbb2.mvs-edu.com/monitoring/d-solo/HIbd_CXZz/mvs-edu-all-servers?orgId=1&refresh=5s&from=1618838859181&to=1618839159181&var-datasource=Prometheus&var-job=bbb&var-job_node_exporter=bbb_node_exporter&var-job_netdata=&var-interface=br-3b22f05a3dbe&panelId=52"  frameborder="0"></iframe>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <!--Video Participants -->
+                <iframe style="width: 99%; height: 50vh" src="https://bbb2.mvs-edu.com/monitoring/d-solo/HIbd_CXZz/mvs-edu-all-servers?orgId=1&refresh=5s&from=1618838875661&to=1618839175661&var-datasource=Prometheus&var-job=bbb&var-job_node_exporter=bbb_node_exporter&var-job_netdata=&var-interface=br-3b22f05a3dbe&panelId=8"  frameborder="0"></iframe>
+            </div>
+        </div>
     </div>
-    <div class="lists">
-        <ul>
-            <li>1. Compute (8 CPU Core, 16 GB RAM, 3 GHz processor): <span id="compute" disabled></span></li>
-            <li>2. Storage: <span id="storage" ></span> </li>
-            <li>3. Bandwidth: <span id="bandwidth" ></span> </li>
-            <li id="scalelite" style="display: none;"><span>4. Scalelite server needed</span></li>
-            </ul>
-    </div>
-
-    <!-- Price comparision  -->
-    <div class="price-compare">
-        <div class="hel">
-            <h4>HEL</h4>
-            <ul>
-            <li>Compute: <span id="hel-compute"></span> Compute, Price: <span id="hel-compute-price"></span> $ per month</li>
-            <li>Storage: <span id="hel-storage"></span></li>
-            <li>Bandwidth: <span id="hel-bandwidth"></span> </li>
-            <li>Total : <span id="total-hel"></span></li>
-        </ul>
-        </div> 
-        <div class="aws">
-            <h4>AWS <span><a  href="https://calculator.aws/#/createCalculator/EC2?nc2=type_a"  target="_blank">Reference</a></span></h4> 
-            <ul>
-            <li>Compute: <span id="aws-compute"></span> c5a.2xlarge, Price: <span id="aws-compute-price"></span> $ per month</li></li>
-            <li>Storage: <span id="aws-storage"></span></li>
-            <li>Bandwidth: <span id="aws-bandwidth"></span> </li>
-            <li>Total : <span id="total-aws"></span></li>
-        </ul>
-        </div>
-        <div class="do">
-            <h4>DO <span><a  href="https://www.digitalocean.com/pricing"  target="_blank">Reference</a></span> </h4> 
-        <ul>
-            <li>Compute: <span id="do-compute"></span> Basic Droplet(shared), Price: <span id="do-compute-price"></span> $ per month</li></li>
-            <li>Storage: <span id="do-storage"></span></li>
-            <li>Bandwidth: <span id="do-bandwidth"></span> </li>
-            <li>Total : <span id="total-DO"></span></li>
-        </ul>
-        </div>
-        </div>
-        <!-- price comparion end -->
-<style>
-    /* set underline for input field to differentiate */
-    #students_count, #classes_count, #sessions_count{
-    border-bottom: solid 1px blue !important; 
-    color: rgb(33, 106, 155);
-    }
-    /* remove default styling for input field */
-    input{
-    border: none;
-    overflow: auto;
-    outline: none;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    text-align:center;
-    }
-    /* remove styling for link */
-    a{
-        font-size: small;
-        font-weight: 300;
-        text-decoration: none;
-    }
-
-    /* remove list style so that we can dynamically add scalelite required line */
-    li{
-        list-style: none !important;
-    }
-
-    /* remove arrow icon in number field */
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0; 
-}
-    /* remove default styling for input field  */
-    #students_count, #classes_count, #sessions_count {
-    border: none;
-    border-bottom: solid 1px blueviolet;
-    overflow: auto;
-    outline: none;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    font-size: 20px;
-    font-weight: bold;
-    resize: none; /*remove the resize handle on the bottom right*/
-    min-width:2em!important;
-    max-width:99.99%!important;
-    transition: width 0.25s;
-    text-align:center;
-}
-    /* prevent font size change when focused change the fontsize according to your need */
-    #students_count, #classes_count, #sessions_count:focus{
-        font-size: 20px;
-        font-weight: bold;
-}
-/* Change placeholder color */
-    ::placeholder {
-        color: #999;
-        opacity: 0.4; /* Firefox */
-    }
-
-    :-ms-input-placeholder { /* Internet Explorer 10-11 */
-        color: #999;
-    }
-
-    ::-ms-input-placeholder { /* Microsoft Edge */
-        color: #999;
-    }
-</style>
-
-<!-- ====== Script fot automatic rezise of input field ====== -->
-<script>
-    function resizable (el, factor) {
-        var int = Number(factor) ||7.7;
-        function resize() {el.style.width = ((el.value.length+1) * int) + 'px'}
-        var e = 'keyup,keypress,focus,blur,change'.split(',');
-        for (var i in e) el.addEventListener(e[i],resize,false);
-        resize();
-    }
-    resizable(document.getElementById('students_count'),20);
-    resizable(document.getElementById('classes_count'),20);
-    resizable(document.getElementById('sessions_count'),20);
-</script>
-
-<!-- ====== Main script Here all the calculation will happens ====== -->
-<script>
-
-    function calculate_price() {
-        // Get the input from students_count
-        var students_count = document.getElementById("students_count").value.trim()
-
-        var classes_count = document.getElementById("classes_count").value.trim()
-      
-        var sessions_count = document.getElementById("sessions_count").value.trim()
- 
-        var video=classes_count*(students_count-1)*0.25*3600
-        var audio=students_count*0.04*3600
-        var screen_sharing=students_count*0.6*900
-        var bandwidth_per_session=Math.ceil((video+audio+screen_sharing)/8);
-        var bandwidth_per_day=bandwidth_per_session*sessions_count;
-        var bandwidth_in_gb=Math.ceil((bandwidth_per_day/1024)*20)
-   
-        // calculate bbb server required for current input of students_count
-       function calclulate_bbb_server(students_count){
-        // if students_count number is multipe of 150 then simply return corresponding bbb server required   
-        if (students_count > 150 && students_count%150 == 0 ){
-            return  (students_count/150)
-            }
-            // if students_count number is not a multiple of 150 (ex:320) then add +1 to fraction i.e 320/150=2.13 
-            // take only 2 and add +1 i.e bbb server required for 320 students_count = 2 + 1 = 3 
-            else if(students_count > 150 && students_count%150 != 0 ) {
-               return  Math.floor(students_count/150) + 1
-            }
-            // if students_counts are less than 150 then return 1
-            else {
-                return 1
-            }
-       }
-
-        // Only show positive vale in result section
-        function deal_with_negative(data){
-            if (data >=0) {
-                return data
-            }
-            else{
-                return 0
-            }
-        }
-        
-        // Get the storage required for recording per day
-        function get_recording_storage(concurrent_class,total_class){
-            return (concurrent_class * total_class * 149)/1024 *20
-        }
-
-        // checks is scalelite load balencer is required?
-        function is_scalelite_needed(data){
-            if (data >1){
-                return "block"
-            }
-            else{
-                return "none"
-            }
-        }
-
-        // Bandwidth price and storage price calculation 
-        var bbb_server = calclulate_bbb_server(students_count)
-        var recording_storage  = get_recording_storage(classes_count,sessions_count)
-        var bandwidth  = bandwidth_in_gb
-        
-        // storage  price  calculations
-        function storage_price_calc(service_provider,recording_storage){
-            switch(service_provider){
-                case 'aws':
-                    return 0.0174 * recording_storage
-                    break;
-                case 'DO':
-                    var default_storage = 320
-                    if (recording_storage > default_storage){
-                        var charged_storage = recording_storage - default_storage
-                        return 0.10 * Math.ceil(charged_storage)
-                    }
-                    else{
-                        return 0
-                    }
-                    break;
-
-                case 'hel':
-                    return 0
-                break;
-            } 
-        }
-
-        // Outbound data price calculate
-         function out_bound_data_price_calc(data,service_provider){
-             switch(service_provider){
-                case 'aws':
-                     if (data < 10000){
-                        return (data  * 0.1093)
-                     }
-                     else {
-                        return (data  * 0.085 )
-                     }
-                break;
-                
-                case 'DO':
-                    var traffic_limit = bbb_server * 6000
-                    var tob = 0
-                    if (data>traffic_limit){
-                        var tob =  (data - traffic_limit) * 0.01
-                    }
-                    return tob
-                break;
-
-                case 'hel':
-                    return 0
-                break;
-             }
-
-         }
-        // Computing node price
-         function compute_price(service_provider, bbb_server){
-             switch(service_provider){
-                 case 'aws' :
-                     return (bbb_server * 135) 
-                    break;
-                case 'DO' :
-                    return (bbb_server * 80)
-                    break;
-                
-                case 'hel' :
-                    return (bbb_server * 72)
-             }
-
-         }
-        //  total price 
-        var hel = compute_price('hel', bbb_server) 
-        var aws = compute_price('aws', bbb_server) + Math.ceil(storage_price_calc('aws',recording_storage)) + Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count))
-        var DO = compute_price('DO', bbb_server) + Math.ceil(storage_price_calc('DO',recording_storage)) + Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count))
-
-        // only give output id all three inputs are given
-        if(students_count && classes_count && sessions_count){
-        
-            // basic
-            document.getElementById("compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
-            document.getElementById("storage").innerHTML = get_recording_storage(classes_count,sessions_count)+' GB per month'
-            document.getElementById("bandwidth").innerHTML = deal_with_negative(bandwidth_in_gb) + ' GB per month'
-
-            // hel
-            document.getElementById("hel-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
-            document.getElementById("hel-compute-price").innerHTML = compute_price('hel', bbb_server)
-            document.getElementById("hel-storage").innerHTML =Math.ceil(storage_price_calc('hel',recording_storage))
-            document.getElementById("hel-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'hel',students_count))
-            document.getElementById("total-hel").innerHTML = hel + " $ per month" 
-
-            // aws
-            document.getElementById("aws-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
-            document.getElementById("aws-compute-price").innerHTML = compute_price('aws', bbb_server)
-            document.getElementById("aws-storage").innerHTML =Math.ceil(storage_price_calc('aws',recording_storage))+' $ per month'
-            document.getElementById("aws-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'aws',students_count)) + ' $ per month'
-            document.getElementById("total-aws").innerHTML = aws + " $ per month" 
-
-            // DO
-            document.getElementById("do-compute").innerHTML = deal_with_negative(calclulate_bbb_server(students_count))
-            document.getElementById("do-compute-price").innerHTML = compute_price('DO', bbb_server)
-            document.getElementById("do-storage").innerHTML =Math.ceil(storage_price_calc('DO',recording_storage))+' $ per month'   
-            document.getElementById("do-bandwidth").innerHTML = Math.ceil(out_bound_data_price_calc(bandwidth,'DO',students_count)) + ' $ per month'
-            document.getElementById("total-DO").innerHTML = DO + " $ per month" 
-            
-            // Scalelite needed?
-            document.getElementById('scalelite').style.display = is_scalelite_needed(calclulate_bbb_server(students_count))
-    }
-
-    }
-</script>
 </body>
 </html>
+
+
